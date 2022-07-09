@@ -4,7 +4,7 @@
 //
 // Command:
 // $ goagen
-// --design=github.com/kod-source/docker-goa-mysql/design
+// --design=github.com/kod-source/Docker-Goa-Air/design
 // --out=/Users/horikoudai/program-practice/docker-goa/app
 // --version=v1.5.13
 
@@ -13,7 +13,7 @@ package test
 import (
 	"context"
 	"fmt"
-	"github.com/kod-source/docker-goa-mysql/app"
+	"github.com/kod-source/Docker-Goa-Air/app"
 	goa "github.com/shogo82148/goa-v1"
 	"github.com/shogo82148/goa-v1/goatest"
 	"io"

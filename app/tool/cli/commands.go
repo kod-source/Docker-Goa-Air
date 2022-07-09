@@ -4,7 +4,7 @@
 //
 // Command:
 // $ goagen
-// --design=github.com/kod-source/docker-goa-mysql/design
+// --design=github.com/kod-source/Docker-Goa-Air/design
 // --out=/Users/horikoudai/program-practice/docker-goa/app
 // --version=v1.5.13
 
@@ -14,7 +14,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/kod-source/docker-goa-mysql/client"
+	"github.com/kod-source/Docker-Goa-Air/client"
 	goa "github.com/shogo82148/goa-v1"
 	goaclient "github.com/shogo82148/goa-v1/client"
 	uuid "github.com/shogo82148/goa-v1/uuid"
@@ -31,6 +31,17 @@ type (
 	AddTestCommand struct {
 		// Left operand
 		Left int
+		// Right operand
+		Right       int
+		PrettyPrint bool
+	}
+
+	// URLAddURLCommand is the command line data structure for the url_add action of url
+	URLAddURLCommand struct {
+		// Left operand
+		Left int
+		// Middle operand
+		Middle int
 		// Right operand
 		Right       int
 		PrettyPrint bool
@@ -52,6 +63,20 @@ func RegisterCommands(app *cobra.Command, c *client.Client) {
 	}
 	tmp1.RegisterFlags(sub, c)
 	sub.PersistentFlags().BoolVar(&tmp1.PrettyPrint, "pp", false, "Pretty print response body")
+	command.AddCommand(sub)
+	app.AddCommand(command)
+	command = &cobra.Command{
+		Use:   "url-add",
+		Short: `add returns the sum`,
+	}
+	tmp2 := new(URLAddURLCommand)
+	sub = &cobra.Command{
+		Use:   `url ["/url/LEFT/MIDDLE/RIGHT"]`,
+		Short: ``,
+		RunE:  func(cmd *cobra.Command, args []string) error { return tmp2.Run(c, args) },
+	}
+	tmp2.RegisterFlags(sub, c)
+	sub.PersistentFlags().BoolVar(&tmp2.PrettyPrint, "pp", false, "Pretty print response body")
 	command.AddCommand(sub)
 	app.AddCommand(command)
 }
@@ -233,6 +258,36 @@ func (cmd *AddTestCommand) Run(c *client.Client, args []string) error {
 func (cmd *AddTestCommand) RegisterFlags(cc *cobra.Command, c *client.Client) {
 	var left int
 	cc.Flags().IntVar(&cmd.Left, "left", left, `Left operand`)
+	var right int
+	cc.Flags().IntVar(&cmd.Right, "right", right, `Right operand`)
+}
+
+// Run makes the HTTP request corresponding to the URLAddURLCommand command.
+func (cmd *URLAddURLCommand) Run(c *client.Client, args []string) error {
+	var path string
+	if len(args) > 0 {
+		path = args[0]
+	} else {
+		path = fmt.Sprintf("/url/%v/%v/%v", cmd.Left, cmd.Middle, cmd.Right)
+	}
+	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
+	ctx := goa.WithLogger(context.Background(), logger)
+	resp, err := c.URLAddURL(ctx, path)
+	if err != nil {
+		goa.LogError(ctx, "failed", "err", err)
+		return err
+	}
+
+	goaclient.HandleResponse(c.Client, resp, cmd.PrettyPrint)
+	return nil
+}
+
+// RegisterFlags registers the command flags with the command line.
+func (cmd *URLAddURLCommand) RegisterFlags(cc *cobra.Command, c *client.Client) {
+	var left int
+	cc.Flags().IntVar(&cmd.Left, "left", left, `Left operand`)
+	var middle int
+	cc.Flags().IntVar(&cmd.Middle, "middle", middle, `Middle operand`)
 	var right int
 	cc.Flags().IntVar(&cmd.Right, "right", right, `Right operand`)
 }

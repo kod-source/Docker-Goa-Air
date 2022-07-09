@@ -3,7 +3,7 @@ package main
 import (
 	"strconv"
 
-	"github.com/kod-source/docker-goa-mysql/app"
+	"github.com/kod-source/Docker-Goa-Air/app"
 	goa "github.com/shogo82148/goa-v1"
 )
 
@@ -19,7 +19,6 @@ func NewTestController(service *goa.Service) *TestController {
 
 // Add runs the add action.
 func (c *TestController) Add(ctx *app.AddTestContext) error {
-	amount := ctx.Left + ctx.Right
-	return ctx.OK([]byte(strconv.Itoa(amount)))
-	// TestController_Add: end_implement
+	sum := ctx.Left + ctx.Right
+	return ctx.OK([]byte(strconv.Itoa(sum)))
 }

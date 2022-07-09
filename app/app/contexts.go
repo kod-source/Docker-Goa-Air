@@ -4,7 +4,7 @@
 //
 // Command:
 // $ goagen
-// --design=github.com/kod-source/docker-goa-mysql/design
+// --design=github.com/kod-source/Docker-Goa-Air/design
 // --out=/Users/horikoudai/program-practice/docker-goa/app
 // --version=v1.5.13
 
@@ -68,6 +68,71 @@ func (ctx *AddTestContext) OK(resp []byte) error {
 
 // NotFound sends a HTTP response with status code 404.
 func (ctx *AddTestContext) NotFound() error {
+	ctx.ResponseData.WriteHeader(404)
+	return nil
+}
+
+// URLAddURLContext provides the url url_add action context.
+type URLAddURLContext struct {
+	context.Context
+	*goa.ResponseData
+	*goa.RequestData
+	Left   int
+	Middle int
+	Right  int
+}
+
+// NewURLAddURLContext parses the incoming request URL and body, performs validations and creates the
+// context used by the url controller url_add action.
+func NewURLAddURLContext(ctx context.Context, r *http.Request, service *goa.Service) (*URLAddURLContext, error) {
+	var err error
+	resp := goa.ContextResponse(ctx)
+	resp.Service = service
+	req := goa.ContextRequest(ctx)
+	req.Request = r
+	rctx := URLAddURLContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramLeft := req.Params["left"]
+	if len(paramLeft) > 0 {
+		rawLeft := paramLeft[0]
+		if left, err2 := strconv.Atoi(rawLeft); err2 == nil {
+			rctx.Left = left
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("left", rawLeft, "integer"))
+		}
+	}
+	paramMiddle := req.Params["middle"]
+	if len(paramMiddle) > 0 {
+		rawMiddle := paramMiddle[0]
+		if middle, err2 := strconv.Atoi(rawMiddle); err2 == nil {
+			rctx.Middle = middle
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("middle", rawMiddle, "integer"))
+		}
+	}
+	paramRight := req.Params["right"]
+	if len(paramRight) > 0 {
+		rawRight := paramRight[0]
+		if right, err2 := strconv.Atoi(rawRight); err2 == nil {
+			rctx.Right = right
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("right", rawRight, "integer"))
+		}
+	}
+	return &rctx, err
+}
+
+// OK sends a HTTP response with status code 200.
+func (ctx *URLAddURLContext) OK(resp []byte) error {
+	if ctx.ResponseData.Header().Get("Content-Type") == "" {
+		ctx.ResponseData.Header().Set("Content-Type", "text/plain")
+	}
+	ctx.ResponseData.WriteHeader(200)
+	_, err := ctx.ResponseData.Write(resp)
+	return err
+}
+
+// NotFound sends a HTTP response with status code 404.
+func (ctx *URLAddURLContext) NotFound() error {
 	ctx.ResponseData.WriteHeader(404)
 	return nil
 }

@@ -21,7 +21,6 @@ var _ = Resource("test", func() {
 			Param("right", Integer, "Right operand")
 		})
 		Response(OK, "text/plain")
-                Response(NotFound)
+		Response(NotFound)
 	})
-
 })

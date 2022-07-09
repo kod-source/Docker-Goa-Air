@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/kod-source/docker-goa-mysql/client"
-	"github.com/kod-source/docker-goa-mysql/tool/cli"
+	"github.com/kod-source/Docker-Goa-Air/client"
+	"github.com/kod-source/Docker-Goa-Air/tool/cli"
 	goaclient "github.com/shogo82148/goa-v1/client"
 	"github.com/spf13/cobra"
 	"net/http"
