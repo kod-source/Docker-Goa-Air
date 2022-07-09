@@ -4,7 +4,7 @@
 //
 // Command:
 // $ goagen
-// --design=github.com/kod-source/docker-goa-mysql/design
+// --design=github.com/kod-source/Docker-Goa-Air/design
 // --out=/Users/horikoudai/program-practice/docker-goa/app
 // --version=v1.5.13
 

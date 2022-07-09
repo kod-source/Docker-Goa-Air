@@ -37,6 +37,38 @@ paths:
       summary: add test
       tags:
       - test
+  /url/{left}/{middle}/{right}:
+    get:
+      description: add returns the sum
+      operationId: url#url_add
+      parameters:
+      - description: Left operand
+        in: path
+        name: left
+        required: true
+        type: integer
+      - description: Middle operand
+        in: path
+        name: middle
+        required: true
+        type: integer
+      - description: Right operand
+        in: path
+        name: right
+        required: true
+        type: integer
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      schemes:
+      - http
+      summary: url_add url
+      tags:
+      - url
 produces:
 - application/json
 - application/xml

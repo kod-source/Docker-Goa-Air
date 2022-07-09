@@ -4,7 +4,7 @@
 //
 // Command:
 // $ goagen
-// --design=github.com/kod-source/docker-goa-mysql/design
+// --design=github.com/kod-source/Docker-Goa-Air/design
 // --out=/Users/horikoudai/program-practice/docker-goa/app
 // --version=v1.5.13
 
@@ -56,4 +56,31 @@ func MountTestController(service *goa.Service, ctrl TestController) {
 	}
 	service.Mux.Handle("GET", "/add/:left/:right", ctrl.MuxHandler("add", h, nil))
 	service.LogInfo("mount", "ctrl", "Test", "action", "Add", "route", "GET /add/:left/:right")
+}
+
+// URLController is the controller interface for the URL actions.
+type URLController interface {
+	goa.Muxer
+	URLAdd(*URLAddURLContext) error
+}
+
+// MountURLController "mounts" a URL resource controller on the given service.
+func MountURLController(service *goa.Service, ctrl URLController) {
+	initService(service)
+	var h goa.Handler
+
+	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
+		// Check if there was an error loading the request
+		if err := goa.ContextError(ctx); err != nil {
+			return err
+		}
+		// Build the context
+		rctx, err := NewURLAddURLContext(ctx, req, service)
+		if err != nil {
+			return err
+		}
+		return ctrl.URLAdd(rctx)
+	}
+	service.Mux.Handle("GET", "/url/:left/:middle/:right", ctrl.MuxHandler("url_add", h, nil))
+	service.LogInfo("mount", "ctrl", "URL", "action", "URLAdd", "route", "GET /url/:left/:middle/:right")
 }
