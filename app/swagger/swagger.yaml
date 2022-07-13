@@ -3,6 +3,27 @@ consumes:
 - application/xml
 - application/gob
 - application/x-gob
+definitions:
+  Url:
+    description: A tenant account (default view)
+    example:
+      amount: 300
+      id: 1
+    properties:
+      amount:
+        description: API href of amount
+        example: 300
+        format: int64
+        type: integer
+      id:
+        description: ID of account
+        example: 1
+        format: int64
+        type: integer
+    required:
+    - id
+    title: 'Mediatype identifier: application/vnd.url+json; view=default'
+    type: object
 host: localhost:3000
 info:
   description: A teaser for goa
@@ -58,10 +79,12 @@ paths:
         required: true
         type: integer
       produces:
-      - text/plain
+      - application/vnd.url+json
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/Url'
         "404":
           description: Not Found
       schemes:

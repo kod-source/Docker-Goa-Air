@@ -1,8 +1,6 @@
 package main
 
 import (
-	"strconv"
-
 	"github.com/kod-source/Docker-Goa-Air/app"
 	goa "github.com/shogo82148/goa-v1"
 )
@@ -20,5 +18,9 @@ func NewURLController(service *goa.Service) *URLController {
 // URLAdd runs the url_add action.
 func (c *URLController) URLAdd(ctx *app.URLAddURLContext) error {
 	sum := ctx.Left + ctx.Middle + ctx.Right
-	return ctx.OK([]byte(strconv.Itoa(sum)))
+	URL := &app.URL{
+		Amount: &sum,
+		ID:     ctx.Left,
+	}
+	return ctx.OK(URL)
 }
