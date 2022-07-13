@@ -5,7 +5,23 @@
 // Command:
 // $ goagen
 // --design=github.com/kod-source/Docker-Goa-Air/design
-// --out=/Users/horikoudai/program-practice/docker-goa/app
+// --out=/Users/horikoudai/Documents/ProgrammingLearning/Docker-Goa-Air/app
 // --version=v1.5.13
 
 package app
+
+// A tenant account (default view)
+//
+// Identifier: application/vnd.url+json; view=default
+type URL struct {
+	// API href of amount
+	Amount *int `form:"amount,omitempty" json:"amount,omitempty" yaml:"amount,omitempty" xml:"amount,omitempty"`
+	// ID of account
+	ID int `form:"id" json:"id" yaml:"id" xml:"id"`
+}
+
+// Validate validates the URL media type instance.
+func (mt *URL) Validate() (err error) {
+
+	return
+}

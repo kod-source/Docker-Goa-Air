@@ -14,7 +14,26 @@ var _ = Resource("url", func() {
 			Param("middle", Integer, "Middle operand")
 			Param("right", Integer, "Right operand")
 		})
-		Response(OK, "text/plain")
+		Response(OK, URLMedia)
 		Response(NotFound)
+	})
+})
+
+var URLMedia = MediaType("application/vnd.url+json", func() {
+	Description("A tenant account")
+	Attributes(func() {
+		Attribute("id", Integer, "ID of account", func() {
+			Example(1)
+		})
+		Attribute("amount", Integer, "API href of amount", func() {
+			Example(300)
+		})
+
+		Required("id")
+	})
+
+	View("default", func() {
+		Attribute("id")
+		Attribute("amount")
 	})
 })

@@ -5,7 +5,7 @@
 // Command:
 // $ goagen
 // --design=github.com/kod-source/Docker-Goa-Air/design
-// --out=/Users/horikoudai/program-practice/docker-goa/app
+// --out=/Users/horikoudai/Documents/ProgrammingLearning/Docker-Goa-Air/app
 // --version=v1.5.13
 
 package test
@@ -90,17 +90,18 @@ func URLAddURLNotFound(t testing.TB, ctx context.Context, service *goa.Service, 
 }
 
 // URLAddURLOK runs the method URLAdd of the given controller with the given parameters.
-// It returns the response writer so it's possible to inspect the response headers.
+// It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func URLAddURLOK(t testing.TB, ctx context.Context, service *goa.Service, ctrl app.URLController, left int, middle int, right int) http.ResponseWriter {
+func URLAddURLOK(t testing.TB, ctx context.Context, service *goa.Service, ctrl app.URLController, left int, middle int, right int) (http.ResponseWriter, *app.URL) {
 	t.Helper()
 
 	// Setup service
 	var (
 		logBuf strings.Builder
+		resp   interface{}
 
-		respSetter goatest.ResponseSetterFunc = func(r interface{}) {}
+		respSetter goatest.ResponseSetterFunc = func(r interface{}) { resp = r }
 	)
 	if service == nil {
 		service = goatest.Service(&logBuf, respSetter)
@@ -135,7 +136,7 @@ func URLAddURLOK(t testing.TB, ctx context.Context, service *goa.Service, ctrl a
 			panic("invalid test data " + err.Error()) // bug
 		}
 		t.Errorf("unexpected parameter validation error: %+v", e)
-		return nil
+		return nil, nil
 	}
 
 	// Perform action
@@ -148,7 +149,15 @@ func URLAddURLOK(t testing.TB, ctx context.Context, service *goa.Service, ctrl a
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
+	var mt *app.URL
+	if resp != nil {
+		var _ok bool
+		mt, _ok = resp.(*app.URL)
+		if !_ok {
+			t.Fatalf("invalid response media: got variable of type %T, value %+v, expected instance of app.URL", resp, resp)
+		}
+	}
 
 	// Return results
-	return rw
+	return rw, mt
 }

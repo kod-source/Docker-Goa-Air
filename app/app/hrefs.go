@@ -5,7 +5,7 @@
 // Command:
 // $ goagen
 // --design=github.com/kod-source/Docker-Goa-Air/design
-// --out=/Users/horikoudai/program-practice/docker-goa/app
+// --out=/Users/horikoudai/Documents/ProgrammingLearning/Docker-Goa-Air/app
 // --version=v1.5.13
 
 package app

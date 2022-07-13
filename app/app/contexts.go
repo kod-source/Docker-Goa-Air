@@ -5,7 +5,7 @@
 // Command:
 // $ goagen
 // --design=github.com/kod-source/Docker-Goa-Air/design
-// --out=/Users/horikoudai/program-practice/docker-goa/app
+// --out=/Users/horikoudai/Documents/ProgrammingLearning/Docker-Goa-Air/app
 // --version=v1.5.13
 
 package app
@@ -122,13 +122,11 @@ func NewURLAddURLContext(ctx context.Context, r *http.Request, service *goa.Serv
 }
 
 // OK sends a HTTP response with status code 200.
-func (ctx *URLAddURLContext) OK(resp []byte) error {
+func (ctx *URLAddURLContext) OK(r *URL) error {
 	if ctx.ResponseData.Header().Get("Content-Type") == "" {
-		ctx.ResponseData.Header().Set("Content-Type", "text/plain")
+		ctx.ResponseData.Header().Set("Content-Type", "application/vnd.url+json")
 	}
-	ctx.ResponseData.WriteHeader(200)
-	_, err := ctx.ResponseData.Write(resp)
-	return err
+	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // NotFound sends a HTTP response with status code 404.
