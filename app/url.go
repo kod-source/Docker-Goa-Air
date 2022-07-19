@@ -15,7 +15,7 @@ func NewURLController(service *goa.Service) *URLController {
 	return &URLController{Controller: service.NewController("URLController")}
 }
 
-// URLAdd runs the url_add action.
+// RLAdd runs the url_add action.
 func (c *URLController) URLAdd(ctx *app.URLAddURLContext) error {
 	sum := ctx.Left + ctx.Middle + ctx.Right
 	URL := &app.URL{
