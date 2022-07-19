@@ -23,7 +23,7 @@ func TestController_URLAdd(t *testing.T) {
 		_, got := test.URLAddURLOK(t, ctx, servic, ctrl, left, middle, right)
 
 		want := &app.URL{
-			Amount: pointer.Int(100),
+			Amount: pointer.Int(300),
 			ID:     100,
 		}
 		if diff := cmp.Diff(got, want); diff != "" {
